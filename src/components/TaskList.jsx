@@ -29,9 +29,7 @@ const TaskList = () => {
   const getTasks = async () => {
     setIsLoading(true);
     try {
-      const { data } = await axios.get(
-        `${URL}/api/tasks`
-      );
+      const { data } = await axios.get(`${URL}/api/tasks`);
       setTasks(data);
       setIsLoading(false);
     } catch (error) {
@@ -67,7 +65,7 @@ const TaskList = () => {
   const deleteTask = async (id) => {
     try {
       await axios.delete(`${URL}/api/tasks/${id}`);
-      toast.success("Task deleted successfully")
+      toast.success("Task deleted successfully");
       getTasks();
     } catch (error) {
       toast.error(error.message);
@@ -89,7 +87,7 @@ const TaskList = () => {
     }
     try {
       await axios.put(`${URL}/api/tasks/${taskID}`, formData);
-      toast.success("Task updated successfully")
+      toast.success("Task updated successfully");
       // To clear input field after successfully updating a task
       setFormData({ ...formData, name: "" });
       // To cancle editing mode
@@ -109,7 +107,22 @@ const TaskList = () => {
     };
     try {
       await axios.put(`${URL}/api/tasks/${task._id}`, newFormData);
-      toast.success("Task completed suuccessfully")
+      toast.success("Task completed successfully");
+      getTasks();
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  // To set a completed task back to incomplete
+  const setToIncomplete = async (task) => {
+    const newFormData = {
+      name: task.name,
+      completed: false,
+    };
+    try {
+      await axios.put(`${URL}/api/tasks/${task._id}`, newFormData);
+      toast.success("Task set to incomplete successfully");
       getTasks();
     } catch (error) {
       toast.error(error.message);
@@ -164,6 +177,7 @@ const TaskList = () => {
                 deleteTask={deleteTask}
                 getSingleTask={getSingleTask}
                 setToComplete={setToComplete}
+                setToIncomplete={setToIncomplete}
               />
             );
           })}
