@@ -29,7 +29,9 @@ const TaskList = () => {
   const getTasks = async () => {
     setIsLoading(true);
     try {
-      const { data } = await axios.get(`${URL}/api/tasks`);
+      const { data } = await axios.get(
+        `${URL}/api/tasks`
+      );
       setTasks(data);
       setIsLoading(false);
     } catch (error) {
@@ -65,6 +67,7 @@ const TaskList = () => {
   const deleteTask = async (id) => {
     try {
       await axios.delete(`${URL}/api/tasks/${id}`);
+      toast.success("Task deleted successfully")
       getTasks();
     } catch (error) {
       toast.error(error.message);
@@ -86,6 +89,7 @@ const TaskList = () => {
     }
     try {
       await axios.put(`${URL}/api/tasks/${taskID}`, formData);
+      toast.success("Task updated successfully")
       // To clear input field after successfully updating a task
       setFormData({ ...formData, name: "" });
       // To cancle editing mode
@@ -105,6 +109,7 @@ const TaskList = () => {
     };
     try {
       await axios.put(`${URL}/api/tasks/${task._id}`, newFormData);
+      toast.success("Task completed suuccessfully")
       getTasks();
     } catch (error) {
       toast.error(error.message);
@@ -113,10 +118,10 @@ const TaskList = () => {
 
   useEffect(() => {
     const cTask = tasks.filter((task) => {
-      return task.completed === true
-    })
-    setCompletedTasks(cTask)
-  }, [tasks])
+      return task.completed === true;
+    });
+    setCompletedTasks(cTask);
+  }, [tasks]);
 
   return (
     <div>
